@@ -71,6 +71,32 @@ resource "helm_release" "istio_ingress" {
   wait       = false # avoid Terraform hanging
 
   depends_on = [helm_release.istiod]
+
+  # -----------------------------
+  # Resource overrides for small nodes
+  # -----------------------------
+  # set = [
+  #   {
+  #     name  = "autoscaling.enabled"
+  #     value = "false"
+  #   },
+  #   {
+  #     name  = "resources.requests.cpu"
+  #     value = "100m"
+  #   },
+  #   {
+  #     name  = "resources.requests.memory"
+  #     value = "128Mi"
+  #   },
+  #   {
+  #     name  = "resources.limits.cpu"
+  #     value = "250m"
+  #   },
+  #   {
+  #     name  = "resources.limits.memory"
+  #     value = "256Mi"
+  #   }
+  # ]
 }
 
 # -----------------------------
