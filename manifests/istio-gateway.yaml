@@ -18,7 +18,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: my-virtual-service
-  namespace: demo-app
+  namespace: learn-eks-sm
 spec:
   hosts:
   - "*"
