@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Github, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { Github, CheckCircle2, AlertCircle, Loader2, Frown } from 'lucide-react';
 import { TechStack } from '@/components/TechStack';
 import { WorkflowVisualizer } from '@/components/WorkflowVisualizer';
 import { DocumentationSection } from '@/components/DocumentationSection';
@@ -9,7 +9,7 @@ import { DocumentationSection } from '@/components/DocumentationSection';
 export default function Home() {
   const [message, setMessage] = useState('Initializing...');
   const [timestamp, setTimestamp] = useState('');
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
+  const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'github-only'>('loading');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,8 +23,9 @@ export default function Home() {
       } catch (err) {
         if (process.env.NEXT_PUBLIC_DEPLOY_SOURCE === "github-pages") {
           setMessage(
-            "Bro... clone this repo and deploy it on AWS yourself. I'm hosting this on GitHub Pages because an EC2 instance would bankrupt me faster than my degree already did."
-          )
+            "Bro... clone this repo and deploy it on AWS yourself. I'm hosting this on GitHub Pages because an EKS Cluster would bankrupt me faster than my degree already did."
+          );
+          setStatus('github-only');
         } else {
           console.error(err);
           setMessage('Backend unavailable');
@@ -73,18 +74,25 @@ export default function Home() {
         </p>
 
         {/* Backend Status Widget */}
-        <div className="max-w-sm mx-auto glass-panel rounded-xl p-1 flex items-center gap-4 pr-6 mb-12">
-          <div className={`p-3 rounded-lg ${status === 'success' ? 'bg-[var(--accent-green)]/10 text-[var(--accent-green)]' : status === 'error' ? 'bg-red-500/10 text-red-500' : 'bg-yellow-500/10 text-yellow-500'}`}>
+        <div className={`mx-auto glass-panel rounded-xl p-1 flex items-center gap-4 pr-6 mb-12 transition-all duration-500 ${status === 'github-only' ? 'max-w-2xl' : 'max-w-sm'}`}>
+          <div className={`p-3 rounded-lg flex-shrink-0 ${status === 'success' ? 'bg-[var(--accent-green)]/10 text-[var(--accent-green)]' :
+              status === 'error' ? 'bg-red-500/10 text-red-500' :
+                status === 'github-only' ? 'bg-orange-500/10 text-orange-500' :
+                  'bg-yellow-500/10 text-yellow-500'
+            }`}>
             {status === 'loading' && <Loader2 className="w-5 h-5 animate-spin" />}
             {status === 'success' && <CheckCircle2 className="w-5 h-5" />}
             {status === 'error' && <AlertCircle className="w-5 h-5" />}
+            {status === 'github-only' && <Frown className="w-5 h-5 animate-bounce" />}
           </div>
-          <div className="text-left flex-1">
-            <p className="text-xs text-gray-500 font-mono uppercase tracking-wider">Backend Status</p>
-            <p className="text-sm font-medium text-white truncate">{message}</p>
+          <div className="text-left flex-1 min-w-0">
+            <p className="text-xs text-gray-500 font-mono uppercase tracking-wider mb-0.5">Backend Status</p>
+            <p className={`text-sm font-medium text-white ${status === 'github-only' ? 'whitespace-normal leading-relaxed text-orange-200' : 'truncate'}`}>
+              {message}
+            </p>
           </div>
           {status === 'success' && (
-            <div className="text-right hidden sm:block">
+            <div className="text-right hidden sm:block flex-shrink-0">
               <p className="text-[10px] text-gray-600 font-mono">{timestamp}</p>
             </div>
           )}

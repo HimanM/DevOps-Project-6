@@ -10,6 +10,11 @@ The goal is to master modern cloud-native technologies:
 - **Service Mesh**: Traffic management and security with Istio.
 - **Observability**: Visualizing the mesh with Kiali.
 
+## 🌐 Live Demo
+
+Check out the frontend deployment on GitHub Pages: **[Live Demo](https://devops6.himanmanduja.fun)**
+> **Note:** This is a frontend-only deployment. The backend EKS cluster is not connected to this demo instance.
+
 ### Architecture
 This project implements a modern **[Cloud Native](https://www.cncf.io/)** architecture:
 
