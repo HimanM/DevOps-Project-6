@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: ghcr.io/himanm/devops-project-6/frontend:sha-f5622b8
+        image: ghcr.io/himanm/devops-project-6/frontend:sha-3f1aa18
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
