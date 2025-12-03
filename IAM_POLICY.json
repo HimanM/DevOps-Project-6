@@ -1,0 +1,51 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "TerraformMergedPolicy",
+            "Effect": "Allow",
+            "Action": [
+                "eks:*",
+                "ec2:*",
+                "cloudformation:*",
+                "autoscaling:*",
+                "logs:CreateLogGroup",
+                "logs:TagResource",
+                "logs:PutRetentionPolicy",
+                "logs:ListTagsForResource",
+                "logs:DeleteLogGroup",
+                "kms:CreateKey",
+                "kms:TagResource",
+                "kms:DescribeKey",
+                "kms:EnableKeyRotation",
+                "kms:GetKeyPolicy",
+                "kms:PutKeyPolicy",
+                "kms:ListResourceTags",
+                "kms:ScheduleKeyDeletion",
+                "kms:CreateAlias",
+                "iam:CreateRole",
+                "iam:AttachRolePolicy",
+                "iam:PutRolePolicy",
+                "iam:CreateInstanceProfile",
+                "iam:AddRoleToInstanceProfile",
+                "iam:PassRole",
+                "iam:GetRole",
+                "iam:ListRoles",
+                "iam:ListInstanceProfilesForRole",
+                "iam:CreateServiceLinkedRole",
+                "iam:TagRole",
+                "iam:CreatePolicy",
+                "iam:TagPolicy",
+                "iam:DeletePolicy",
+                "iam:DeleteRole",
+                "iam:DetachRolePolicy",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion",
+                "iam:ListAttachedRolePolicies",
+                "iam:ListPolicyVersions",
+                "iam:ListRolePolicies"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
