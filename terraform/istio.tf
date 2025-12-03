@@ -14,6 +14,21 @@ resource "kubernetes_namespace" "prometheus" {
 }
 
 # -----------------------------
+# Istio CRDs (install first)
+# -----------------------------
+resource "helm_release" "istio_crds" {
+  name       = "istio-crds"
+  repository = "https://istio-release.storage.googleapis.com/charts"
+  chart      = "crds"
+  namespace  = kubernetes_namespace.istio_system.metadata[0].name
+  version    = "1.24.0"
+  timeout    = 1800
+  wait       = true
+
+  depends_on = [module.eks]
+}
+
+# -----------------------------
 # Istio Base
 # -----------------------------
 resource "helm_release" "istio_base" {
@@ -22,10 +37,10 @@ resource "helm_release" "istio_base" {
   chart      = "base"
   namespace  = kubernetes_namespace.istio_system.metadata[0].name
   version    = "1.24.0"
-  timeout    = 900
+  timeout    = 1800
   wait       = true
 
-  depends_on = [module.eks]
+  depends_on = [helm_release.istio_crds]
 }
 
 # -----------------------------
@@ -37,14 +52,14 @@ resource "helm_release" "istiod" {
   chart      = "istiod"
   namespace  = kubernetes_namespace.istio_system.metadata[0].name
   version    = "1.24.0"
-  timeout    = 900
+  timeout    = 1800
   wait       = true
 
   depends_on = [helm_release.istio_base]
 }
 
 # -----------------------------
-# Istio Ingress Gateway Deployment (Helm only)
+# Istio Ingress Gateway (Helm only)
 # -----------------------------
 resource "helm_release" "istio_ingress" {
   name       = "istio-ingressgateway"
@@ -52,8 +67,8 @@ resource "helm_release" "istio_ingress" {
   chart      = "gateway"
   namespace  = kubernetes_namespace.istio_system.metadata[0].name
   version    = "1.24.0"
-  timeout    = 900
-  wait       = true
+  timeout    = 1800
+  wait       = false # avoid Terraform hanging
 
   depends_on = [helm_release.istiod]
 }
@@ -126,8 +141,8 @@ resource "helm_release" "prometheus" {
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "prometheus"
   namespace  = kubernetes_namespace.prometheus.metadata[0].name
-  timeout    = 600
-  wait       = false
+  timeout    = 900
+  wait       = false # allow Helm to continue without blocking
 
   set = [
     {
