@@ -9,7 +9,9 @@ resource "helm_release" "istio_base" {
   repository = "https://istio-release.storage.googleapis.com/charts"
   chart      = "base"
   namespace  = kubernetes_namespace.istio_system.metadata[0].name
-  version    = "1.20.0"
+  version    = "1.24.0" # Upgraded for better compatibility
+  timeout    = 900
+  wait       = true # Wait for CRDs to be established
 
   depends_on = [module.eks]
 }
@@ -19,7 +21,9 @@ resource "helm_release" "istiod" {
   repository = "https://istio-release.storage.googleapis.com/charts"
   chart      = "istiod"
   namespace  = kubernetes_namespace.istio_system.metadata[0].name
-  version    = "1.20.0"
+  version    = "1.24.0" # Match base version
+  timeout    = 900
+  wait       = true
 
   depends_on = [helm_release.istio_base]
 }
@@ -29,7 +33,9 @@ resource "helm_release" "istio_ingress" {
   repository = "https://istio-release.storage.googleapis.com/charts"
   chart      = "gateway"
   namespace  = kubernetes_namespace.istio_system.metadata[0].name
-  version    = "1.20.0"
+  version    = "1.24.0" # Match base version
+  timeout    = 900
+  wait       = true
 
   set = [
     {
@@ -46,12 +52,14 @@ resource "helm_release" "kiali_server" {
   repository = "https://kiali.org/helm-charts"
   chart      = "kiali-server"
   namespace  = kubernetes_namespace.istio_system.metadata[0].name
-  version    = "1.78.0" # Check for latest version compatible with Istio
+  version    = "1.89.0" # Upgraded Kiali version
+  timeout    = 900
+  wait       = true
 
   set = [
     {
       name  = "auth.strategy"
-      value = "anonymous" # For learning/demo purposes
+      value = "anonymous"
     },
     {
       name  = "external_services.prometheus.url"
@@ -62,8 +70,6 @@ resource "helm_release" "kiali_server" {
   depends_on = [helm_release.istiod]
 }
 
-# Note: Kiali usually requires Prometheus. 
-# Adding Prometheus installation for completeness if Kiali is needed.
 resource "kubernetes_namespace" "prometheus" {
   metadata {
     name = "prometheus"
@@ -75,6 +81,8 @@ resource "helm_release" "prometheus" {
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "prometheus"
   namespace  = kubernetes_namespace.prometheus.metadata[0].name
+  timeout    = 900
+  wait       = true
 
   set = [
     {
