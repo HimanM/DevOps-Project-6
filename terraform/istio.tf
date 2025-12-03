@@ -79,6 +79,18 @@ resource "helm_release" "istio_ingress" {
 }
 
 # -----------------------------
+# Data Source for Istio Ingress Service
+# -----------------------------
+data "kubernetes_service" "istio_ingress" {
+  metadata {
+    name      = "istio-ingressgateway"
+    namespace = kubernetes_namespace.istio_system.metadata[0].name
+  }
+
+  depends_on = [helm_release.istio_ingress]
+}
+
+# -----------------------------
 # Kiali
 # -----------------------------
 resource "helm_release" "kiali_server" {

@@ -28,10 +28,10 @@ output "configure_kubectl" {
 
 output "istio_ingress_lb_hostname" {
   description = "The external hostname or IP of the Istio ingress gateway LoadBalancer"
-  value       = kubernetes_service.istio_ingress_lb.status[0].load_balancer[0].ingress[0].hostname
+  value       = data.kubernetes_service.istio_ingress.status[0].load_balancer[0].ingress[0].hostname
 }
 
 output "istio_ingress_lb_ip" {
   description = "The external IP of the Istio ingress gateway LoadBalancer (if available)"
-  value       = kubernetes_service.istio_ingress_lb.status[0].load_balancer[0].ingress[0].ip
+  value       = data.kubernetes_service.istio_ingress.status[0].load_balancer[0].ingress[0].ip
 }
