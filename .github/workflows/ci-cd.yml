@@ -3,9 +3,9 @@ name: Build and Deploy
 on:
   push:
     branches: [ "main" ]
-    # paths:
-    #   - 'frontend/**'
-    #   - 'backend/**'
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
 
 env:
   REGISTRY: ghcr.io
@@ -24,15 +24,15 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      # - name: Check for changes
-      #   id: changes
-      #   uses: dorny/paths-filter@v2
-      #   with:
-      #     filters: |
-      #       frontend:
-      #         - 'frontend/**'
-      #       backend:
-      #         - 'backend/**'
+      - name: Check for changes
+        id: changes
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            frontend:
+              - 'frontend/**'
+            backend:
+              - 'backend/**'
 
       - name: Log in to the Container registry
         # if: steps.changes.outputs.frontend == 'true' || steps.changes.outputs.backend == 'true'
