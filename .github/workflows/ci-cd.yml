@@ -24,18 +24,18 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Check for changes
-        id: changes
-        uses: dorny/paths-filter@v2
-        with:
-          filters: |
-            frontend:
-              - 'frontend/**'
-            backend:
-              - 'backend/**'
+      # - name: Check for changes
+      #   id: changes
+      #   uses: dorny/paths-filter@v2
+      #   with:
+      #     filters: |
+      #       frontend:
+      #         - 'frontend/**'
+      #       backend:
+      #         - 'backend/**'
 
       - name: Log in to the Container registry
-        if: steps.changes.outputs.frontend == 'true' || steps.changes.outputs.backend == 'true'
+        # if: steps.changes.outputs.frontend == 'true' || steps.changes.outputs.backend == 'true'
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
@@ -44,7 +44,7 @@ jobs:
 
       # Frontend Build & Push
       - name: Extract metadata (tags, labels) for Frontend
-        if: steps.changes.outputs.frontend == 'true'
+        # if: steps.changes.outputs.frontend == 'true'
         id: meta-frontend
         uses: docker/metadata-action@v5
         with:
@@ -52,7 +52,7 @@ jobs:
           tags: type=sha,format=short
 
       - name: Build and push Frontend
-        if: steps.changes.outputs.frontend == 'true'
+        # if: steps.changes.outputs.frontend == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
@@ -62,7 +62,7 @@ jobs:
 
       # Backend Build & Push
       - name: Extract metadata (tags, labels) for Backend
-        if: steps.changes.outputs.backend == 'true'
+        # if: steps.changes.outputs.backend == 'true'
         id: meta-backend
         uses: docker/metadata-action@v5
         with:
@@ -70,7 +70,7 @@ jobs:
           tags: type=sha,format=short
 
       - name: Build and push Backend
-        if: steps.changes.outputs.backend == 'true'
+        # if: steps.changes.outputs.backend == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./backend
@@ -80,28 +80,28 @@ jobs:
 
       # Update Manifests & Push
       - name: Update Manifests and Push
-        if: steps.changes.outputs.frontend == 'true' || steps.changes.outputs.backend == 'true'
+        # if: steps.changes.outputs.frontend == 'true' || steps.changes.outputs.backend == 'true'
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           
           # Update Frontend Manifest
-          if [ "${{ steps.changes.outputs.frontend }}" == "true" ]; then
+          # if [ "${{ steps.changes.outputs.frontend }}" == "true" ]; then
             NEW_TAG=${{ steps.meta-frontend.outputs.version }}
             NEW_IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${NEW_TAG}"
             echo "Updating Frontend to ${NEW_IMAGE}"
             sed -i "s|image: .*frontend:.*|image: ${NEW_IMAGE}|" manifests/frontend-deployment.yaml
             git add manifests/frontend-deployment.yaml
-          fi
+          # fi
           
           # Update Backend Manifest
-          if [ "${{ steps.changes.outputs.backend }}" == "true" ]; then
+          # if [ "${{ steps.changes.outputs.backend }}" == "true" ]; then
             NEW_TAG=${{ steps.meta-backend.outputs.version }}
             NEW_IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${NEW_TAG}"
             echo "Updating Backend to ${NEW_IMAGE}"
             sed -i "s|image: .*backend:.*|image: ${NEW_IMAGE}|" manifests/backend-deployment.yaml
             git add manifests/backend-deployment.yaml
-          fi
+          # fi
           
           # Commit and Push
           git commit -m "Update manifests with new image tags" || echo "No changes to commit"
