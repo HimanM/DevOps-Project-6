@@ -57,65 +57,25 @@ resource "helm_release" "istio_ingress" {
 
   depends_on = [helm_release.istiod]
 
-  # -----------------------------
-  # Resource overrides for small nodes
-  # -----------------------------
-  # set = [
-  #   {
-  #     name  = "autoscaling.enabled"
-  #     value = "false"
-  #   },
-  #   {
-  #     name  = "resources.requests.cpu"
-  #     value = "100m"
-  #   },
-  #   {
-  #     name  = "resources.requests.memory"
-  #     value = "128Mi"
-  #   },
-  #   {
-  #     name  = "resources.limits.cpu"
-  #     value = "250m"
-  #   },
-  #   {
-  #     name  = "resources.limits.memory"
-  #     value = "256Mi"
-  #   }
-  # ]
-}
-
-# -----------------------------
-# Istio Ingress Gateway Service (LoadBalancer)
-# -----------------------------
-resource "kubernetes_service" "istio_ingress_lb" {
-  metadata {
-    name      = "istio-ingressgateway"
-    namespace = kubernetes_namespace.istio_system.metadata[0].name
-    labels = {
-      app = "istio-ingressgateway"
-    }
-  }
-
-  spec {
-    type = "LoadBalancer"
-    selector = {
-      app = "istio-ingressgateway"
-    }
-
-    port {
-      name        = "http"
-      port        = 80
-      target_port = 8080
-    }
-
-    port {
-      name        = "https"
-      port        = 443
-      target_port = 8443
-    }
-  }
-
-  depends_on = [helm_release.istio_ingress]
+  values = [
+    yamlencode({
+      service = {
+        type = "LoadBalancer"
+        ports = [
+          {
+            name       = "http"
+            port       = 80
+            targetPort = 8080
+          },
+          {
+            name       = "https"
+            port       = 443
+            targetPort = 8443
+          }
+        ]
+      }
+    })
+  ]
 }
 
 # -----------------------------
