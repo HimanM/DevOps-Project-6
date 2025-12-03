@@ -23,6 +23,7 @@
                 "kms:ListResourceTags",
                 "kms:ScheduleKeyDeletion",
                 "kms:CreateAlias",
+                "kms:ListAliases",
                 "iam:CreateRole",
                 "iam:AttachRolePolicy",
                 "iam:PutRolePolicy",
@@ -43,7 +44,8 @@
                 "iam:GetPolicyVersion",
                 "iam:ListAttachedRolePolicies",
                 "iam:ListPolicyVersions",
-                "iam:ListRolePolicies"
+                "iam:ListRolePolicies",
+                "iam:CreateOpenIDConnectProvider"
             ],
             "Resource": "*"
         }
