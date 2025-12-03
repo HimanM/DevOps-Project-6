@@ -27,6 +27,18 @@ module "eks" {
     }
   }
 
+  # Allow Control Plane to talk to Istio Webhook (port 15017)
+  node_security_group_additional_rules = {
+    ingress_15017 = {
+      description                   = "Cluster API to Istio Webhook"
+      protocol                      = "tcp"
+      from_port                     = 15017
+      to_port                       = 15017
+      type                          = "ingress"
+      source_cluster_security_group = true
+    }
+  }
+
   # Managed Node Groups
   eks_managed_node_groups = {
     general = {
@@ -44,7 +56,6 @@ module "eks" {
   }
 
   # Cluster access entry
-  # To allow the user creating the cluster to administer it
   enable_cluster_creator_admin_permissions = true
 
   tags = {
