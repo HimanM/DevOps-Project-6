@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: ghcr.io/HimanM/DevOps-Project-6/backend:sha-73591a0
+        image: ghcr.io/himanm/devops-project-6/backend:sha-b001409
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
