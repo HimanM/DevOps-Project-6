@@ -14,17 +14,17 @@ Ensure you have the following installed:
 
 You need to push your Docker images to a registry (like Amazon ECR) so EKS can pull them.
 
-### Build and Push to GitHub Container Registry (GHCR)
+### Build and Push (Automated via GitHub Actions)
 
-Ensure you are logged in to GHCR:
-```bash
-# You need a Personal Access Token (PAT) with 'write:packages' scope
-export CR_PAT=YOUR_TOKEN
-echo $CR_PAT | docker login ghcr.io -u HimanM --password-stdin
-```
+A GitHub Actions workflow (`.github/workflows/ci-cd.yml`) is configured to automatically:
+1.  Build and push Docker images to GitHub Container Registry (GHCR) on every push to `main`.
+2.  Update the Kubernetes manifests in the repository with the new image tags.
 
-Build and push the images:
+**To trigger a build:**
+Simply commit and push changes to the `frontend/` or `backend/` directories.
 
+**Manual Build (Optional):**
+If you need to build manually:
 ```bash
 # Build Frontend
 docker build -t ghcr.io/himanm/devops-project-6/frontend:latest ./frontend
