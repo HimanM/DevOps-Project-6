@@ -3,9 +3,9 @@ name: Build and Deploy
 on:
   push:
     branches: [ "main" ]
-    paths:
-      - 'frontend/**'
-      - 'backend/**'
+    # paths:
+    #   - 'frontend/**'
+    #   - 'backend/**'
 
 env:
   REGISTRY: ghcr.io
