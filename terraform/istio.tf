@@ -14,22 +14,7 @@ resource "kubernetes_namespace" "prometheus" {
 }
 
 # -----------------------------
-# Istio CRDs (install first)
-# -----------------------------
-resource "helm_release" "istio_crds" {
-  name       = "istio-crds"
-  repository = "https://istio-release.storage.googleapis.com/charts"
-  chart      = "crds"
-  namespace  = kubernetes_namespace.istio_system.metadata[0].name
-  version    = "1.24.0"
-  timeout    = 1800
-  wait       = true
-
-  depends_on = [module.eks]
-}
-
-# -----------------------------
-# Istio Base
+# Istio Base (includes CRDs)
 # -----------------------------
 resource "helm_release" "istio_base" {
   name       = "istio-base"
@@ -40,7 +25,7 @@ resource "helm_release" "istio_base" {
   timeout    = 1800
   wait       = true
 
-  depends_on = [helm_release.istio_crds]
+  depends_on = [module.eks]
 }
 
 # -----------------------------
