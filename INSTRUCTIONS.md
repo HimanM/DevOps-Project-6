@@ -66,6 +66,14 @@ kubectl apply -f manifests/namespace.yaml
 kubectl apply -f manifests/
 ```
 
+## 4.1. Configure ArgoCD (Optional)
+
+If you are using ArgoCD for GitOps, add the cluster to your ArgoCD instance:
+
+```bash
+argocd cluster add arn:aws:eks:us-west-2:603630702351:cluster/learn-eks-sm-cluster
+```
+
 ## 5. Access the Application
 
 Get the Load Balancer URL created by the Istio Ingress Gateway.
