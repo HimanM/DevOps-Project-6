@@ -21,9 +21,15 @@ export default function Home() {
         setTimestamp(data.timestamp);
         setStatus('success');
       } catch (err) {
-        console.error(err);
-        setMessage('Backend unavailable');
-        setStatus('error');
+        if (process.env.NEXT_PUBLIC_DEPLOY_SOURCE === "github-pages") {
+          setMessage(
+            "Bro... clone this repo and deploy it on AWS yourself. I'm hosting this on GitHub Pages because an EC2 instance would bankrupt me faster than my degree already did."
+          )
+        } else {
+          console.error(err);
+          setMessage('Backend unavailable');
+          setStatus('error');
+        }
       }
     };
 
