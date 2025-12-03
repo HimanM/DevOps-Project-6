@@ -44,7 +44,7 @@ resource "helm_release" "istiod" {
 }
 
 # -----------------------------
-# Istio Ingress Gateway
+# Istio Ingress Gateway Deployment (Helm only)
 # -----------------------------
 resource "helm_release" "istio_ingress" {
   name       = "istio-ingressgateway"
@@ -55,14 +55,41 @@ resource "helm_release" "istio_ingress" {
   timeout    = 900
   wait       = true
 
-  set = [
-    {
-      name  = "service.type"
-      value = "LoadBalancer"
-    }
-  ]
-
   depends_on = [helm_release.istiod]
+}
+
+# -----------------------------
+# Istio Ingress Gateway Service (LoadBalancer)
+# -----------------------------
+resource "kubernetes_service" "istio_ingress_lb" {
+  metadata {
+    name      = "istio-ingressgateway"
+    namespace = kubernetes_namespace.istio_system.metadata[0].name
+    labels = {
+      app = "istio-ingressgateway"
+    }
+  }
+
+  spec {
+    type = "LoadBalancer"
+    selector = {
+      app = "istio-ingressgateway"
+    }
+
+    port {
+      name        = "http"
+      port        = 80
+      target_port = 8080
+    }
+
+    port {
+      name        = "https"
+      port        = 443
+      target_port = 8443
+    }
+  }
+
+  depends_on = [helm_release.istio_ingress]
 }
 
 # -----------------------------
@@ -99,8 +126,8 @@ resource "helm_release" "prometheus" {
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "prometheus"
   namespace  = kubernetes_namespace.prometheus.metadata[0].name
-  timeout    = 600   # reduce a bit
-  wait       = false # don't block Terraform
+  timeout    = 600
+  wait       = false
 
   set = [
     {

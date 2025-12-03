@@ -25,3 +25,13 @@ output "configure_kubectl" {
   description = "Command to configure kubectl"
   value       = "aws eks update-kubeconfig --region ${var.region} --name ${module.eks.cluster_name}"
 }
+
+output "istio_ingress_lb_hostname" {
+  description = "The external hostname or IP of the Istio ingress gateway LoadBalancer"
+  value       = kubernetes_service.istio_ingress_lb.status[0].load_balancer[0].ingress[0].hostname
+}
+
+output "istio_ingress_lb_ip" {
+  description = "The external IP of the Istio ingress gateway LoadBalancer (if available)"
+  value       = kubernetes_service.istio_ingress_lb.status[0].load_balancer[0].ingress[0].ip
+}
