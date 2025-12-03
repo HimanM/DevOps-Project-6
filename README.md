@@ -11,11 +11,15 @@ The goal is to master modern cloud-native technologies:
 - **Observability**: Visualizing the mesh with Kiali.
 
 ### Architecture
-- **Cloud**: AWS (EKS v1.33)
-- **IaC**: Terraform
-- **GitOps**: ArgoCD
-- **Mesh**: Istio (v1.24.0)
-- **Observability**: Kiali, Prometheus
+This project implements a modern **[Cloud Native](https://www.cncf.io/)** architecture:
+
+- **Infrastructure**: [AWS EKS](https://aws.amazon.com/eks/) (v1.33) provisioned via [Terraform](https://www.terraform.io/).
+- **GitOps**: [ArgoCD](https://argo-cd.readthedocs.io/) for continuous delivery and state synchronization.
+- **Service Mesh**: [Istio](https://istio.io/) (v1.24.0) for traffic management, security, and observability.
+- **Observability**: [Kiali](https://kiali.io/) for mesh visualization and [Prometheus](https://prometheus.io/) for metrics.
+
+**Request Flow:**
+`User` ➔ `AWS ALB` ➔ `Istio Ingress Gateway` ➔ `VirtualService` ➔ `Service` ➔ `Pod`
 
 
 ## 📂 Repository Structure
@@ -105,9 +109,32 @@ Kiali visualizes the service mesh, showing traffic flow and health.
 **Kiali Overview:**
 ![Kiali Overview](.docs/kiali_overview.png)
 
+### 6. Istio Status
+![Istio Status](.docs/istio.png)
+
+### 7. Kubernetes Namespace and Deployments
+
+```bash
+kubectl get deploy -n learn-eks-sm
+kubectl get svc -n learn-eks-sm
+kubectl get pods -n learn-eks-sm
+kubectl get all -n learn-eks-sm
+```
+**CLI Output:**
+![CLI Output](.docs/namespace_details_cli.png)
+
 ## 🧹 Cleanup
 
 ```bash
 cd terraform
 terraform destroy --auto-approve
 ```
+
+## 🔗 Technologies Used
+- **[Amazon EKS](https://aws.amazon.com/eks/)** - Managed Kubernetes Service
+- **[Istio](https://istio.io/)** - Service Mesh
+- **[ArgoCD](https://argo-cd.readthedocs.io/)** - GitOps Continuous Delivery
+- **[Terraform](https://www.terraform.io/)** - Infrastructure as Code
+- **[Kiali](https://kiali.io/)** - Observability Console
+- **[Next.js](https://nextjs.org/)** - Frontend Framework
+
