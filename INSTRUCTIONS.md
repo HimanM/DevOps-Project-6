@@ -82,7 +82,7 @@ To visualize the mesh:
 
 ```bash
 # Port forward Kiali
-kubectl port-forward svc/kiali-server -n istio-system 20001:20001
+kubectl port-forward svc/kiali -n istio-system 20001:20001 --address 0.0.0.0
 ```
 
 Open `http://localhost:20001` in your browser.
