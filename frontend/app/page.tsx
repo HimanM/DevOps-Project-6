@@ -1,10 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Github, ArrowRight, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { Github, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { TechStack } from '@/components/TechStack';
 import { WorkflowVisualizer } from '@/components/WorkflowVisualizer';
 import { DocumentationSection } from '@/components/DocumentationSection';
-import { Button } from '@/components/ui/button';
+
 
 export default function Home() {
   const [message, setMessage] = useState('Initializing...');

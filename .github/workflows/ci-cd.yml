@@ -89,6 +89,7 @@ jobs:
           # if [ "${{ steps.changes.outputs.frontend }}" == "true" ]; then
             NEW_TAG=${{ steps.meta-frontend.outputs.version }}
             NEW_IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${NEW_TAG}"
+            NEW_IMAGE=$(echo "$NEW_IMAGE" | tr '[:upper:]' '[:lower:]')
             echo "Updating Frontend to ${NEW_IMAGE}"
             sed -i "s|image: .*frontend:.*|image: ${NEW_IMAGE}|" manifests/frontend-deployment.yaml
             git add manifests/frontend-deployment.yaml
@@ -98,6 +99,7 @@ jobs:
           # if [ "${{ steps.changes.outputs.backend }}" == "true" ]; then
             NEW_TAG=${{ steps.meta-backend.outputs.version }}
             NEW_IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${NEW_TAG}"
+            NEW_IMAGE=$(echo "$NEW_IMAGE" | tr '[:upper:]' '[:lower:]')
             echo "Updating Backend to ${NEW_IMAGE}"
             sed -i "s|image: .*backend:.*|image: ${NEW_IMAGE}|" manifests/backend-deployment.yaml
             git add manifests/backend-deployment.yaml

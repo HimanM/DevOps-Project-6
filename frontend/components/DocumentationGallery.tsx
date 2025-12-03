@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+
 import Image from "next/image";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";

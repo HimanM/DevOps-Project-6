@@ -10,7 +10,14 @@ import { Cloud, Activity, type LucideIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Helper to render Simple Icons
-const SimpleIcon = ({ icon, className }: { icon: any, className?: string }) => (
+interface SimpleIconProps {
+    title: string;
+    path: string;
+    hex: string;
+    slug: string;
+}
+
+const SimpleIcon = ({ icon, className }: { icon: SimpleIconProps, className?: string }) => (
     <svg
         role="img"
         viewBox="0 0 24 24"
@@ -25,7 +32,7 @@ const SimpleIcon = ({ icon, className }: { icon: any, className?: string }) => (
 
 type TechItem = {
     name: string;
-    icon: any;
+    icon: LucideIcon | SimpleIconProps;
     type: 'simple' | 'lucide';
     description: string;
 };
@@ -53,14 +60,16 @@ export function TechStack() {
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {technologies.map((tech) => {
-                        const IconComponent = tech.icon as LucideIcon;
                         return (
                             <Card key={tech.name} className="glass-panel border-none bg-opacity-0 hover:bg-white/5 transition-all duration-300 group hover:-translate-y-1">
                                 <CardHeader className="flex flex-col items-center pb-3 pt-6">
                                     {tech.type === 'simple' ? (
-                                        <SimpleIcon icon={tech.icon} className="w-10 h-10 text-gray-500 group-hover:text-[var(--accent-green)] transition-colors duration-300" />
+                                        <SimpleIcon icon={tech.icon as SimpleIconProps} className="w-10 h-10 text-gray-500 group-hover:text-[var(--accent-green)] transition-colors duration-300" />
                                     ) : (
-                                        <IconComponent className="w-10 h-10 text-gray-500 group-hover:text-[var(--accent-green)] transition-colors duration-300" />
+                                        (() => {
+                                            const IconComponent = tech.icon as LucideIcon;
+                                            return <IconComponent className="w-10 h-10 text-gray-500 group-hover:text-[var(--accent-green)] transition-colors duration-300" />;
+                                        })()
                                     )}
                                     <CardTitle className="mt-4 text-sm font-medium tracking-wide">{tech.name}</CardTitle>
                                 </CardHeader>

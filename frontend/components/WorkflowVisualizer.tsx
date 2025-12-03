@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, Code, Box, Upload, Server, Network, Globe } from "lucide-react";
+import { Code, Box, Upload, Server, Network, Globe } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -70,7 +70,7 @@ export function WorkflowVisualizer() {
                     ref={scrollContainerRef}
                     className="flex md:hidden overflow-x-auto snap-x snap-mandatory gap-4 pb-8 -mx-6 px-6 scroll-smooth scrollbar-hide"
                 >
-                    {steps.map((step, index) => (
+                    {steps.map((step) => (
                         <div
                             key={step.id}
                             className="workflow-card glass-panel min-w-[85vw] sm:min-w-[300px] p-8 rounded-2xl snap-center flex flex-col items-center text-center border border-[var(--glass-border)] relative overflow-hidden"
@@ -94,7 +94,7 @@ export function WorkflowVisualizer() {
                     {/* Connecting Line */}
                     <div className="absolute top-10 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[var(--glass-border)] to-transparent -z-10" />
 
-                    {steps.map((step, index) => (
+                    {steps.map((step) => (
                         <div key={step.id} className="workflow-card flex flex-col items-center text-center w-40 group relative">
                             <div className="w-20 h-20 rounded-full glass-panel flex items-center justify-center mb-6 text-gray-400 group-hover:text-[var(--accent-green)] group-hover:scale-110 group-hover:border-[var(--accent-green)]/30 transition-all duration-300 z-10 bg-[#050505] border border-[var(--glass-border)] shadow-lg">
                                 <step.icon className="w-9 h-9" />
