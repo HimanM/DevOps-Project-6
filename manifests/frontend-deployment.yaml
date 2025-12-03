@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: frontend:latest # Replace with your ECR/Docker Hub image URI
+        image: ghcr.io/himanm/devops-project-6/frontend:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000

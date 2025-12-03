@@ -14,31 +14,26 @@ Ensure you have the following installed:
 
 You need to push your Docker images to a registry (like Amazon ECR) so EKS can pull them.
 
-### Create ECR Repositories (One-time setup)
+### Build and Push to GitHub Container Registry (GHCR)
+
+Ensure you are logged in to GHCR:
 ```bash
-aws ecr create-repository --repository-name frontend
-aws ecr create-repository --repository-name backend
+# You need a Personal Access Token (PAT) with 'write:packages' scope
+export CR_PAT=YOUR_TOKEN
+echo $CR_PAT | docker login ghcr.io -u HimanM --password-stdin
 ```
 
-### Build and Push
-Replace `<AWS_ACCOUNT_ID>` and `<REGION>` with your details.
+Build and push the images:
 
 ```bash
-# Login to ECR
-aws ecr get-login-password --region <REGION> | docker login --username AWS --password-stdin <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com
-
 # Build Frontend
-docker build -t frontend ./frontend
-docker tag frontend:latest <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/frontend:latest
-docker push <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/frontend:latest
+docker build -t ghcr.io/himanm/devops-project-6/frontend:latest ./frontend
+docker push ghcr.io/himanm/devops-project-6/frontend:latest
 
 # Build Backend
-docker build -t backend ./backend
-docker tag backend:latest <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/backend:latest
-docker push <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/backend:latest
+docker build -t ghcr.io/himanm/devops-project-6/backend:latest ./backend
+docker push ghcr.io/himanm/devops-project-6/backend:latest
 ```
-
-> **Important**: Update the `image` field in `manifests/frontend-deployment.yaml` and `manifests/backend-deployment.yaml` with your ECR image URIs.
 
 ## 2. Provision Infrastructure with Terraform
 

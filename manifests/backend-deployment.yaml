@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: backend:latest # Replace with your ECR/Docker Hub image URI
+        image: ghcr.io/himanm/devops-project-6/backend:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
