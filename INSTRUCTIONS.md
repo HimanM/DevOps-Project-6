@@ -10,6 +10,13 @@ Ensure you have the following installed:
 - [Docker](https://docs.docker.com/get-docker/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
 
+## 0. AWS IAM Configuration
+
+To ensure Terraform can provision the EKS cluster and related resources seamlessly, your AWS IAM user needs specific permissions.
+
+1.  **Recommended:** Use the provided custom policy file [`IAM_POLICY.json`](./IAM_POLICY.json) to configure a permission policy for your IAM user.
+2.  **Alternative:** If you encounter permission issues or find the custom policy difficult to configure, you can attach the `AdministratorAccess` managed policy to your user.
+
 ## 1. Build and Push Docker Images
 
 You need to push your Docker images to a registry (like Amazon ECR) so EKS can pull them.
